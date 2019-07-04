@@ -2,7 +2,7 @@
 /**
  * Define MyClass
  */
-class conn
+class user
 {
   private $servername = "localhost";
   private $username = "imjswxjj_Jsearle";

@@ -1,6 +1,9 @@
 
 <?php
-include "conn.php";
+foreach (glob("class/*.php") as $filename)
+{
+    include $filename;
+}
 $message = "";
 
 
@@ -10,26 +13,12 @@ function test_input($data) {
   $data = htmlspecialchars($data);
   return $data;
 }
-?>
 
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Lobster|Raleway|Rubik" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link href="css/styles.css" rel="stylesheet">
-  <title>I'm Jordan Searle</title> <!--Title-->
-</head>
-<body>
-  <?php
-
-   include "classes.php";
-   echo $nav;
+$title = "Welcome";
+   require("head.php");
    // Check connection
-   $con = new conn();
-   $con->readAll("user");
+   $user = new user();
+   $user->readAll("user");
 
    if(isset($_POST['SubmitButton'])){ //check if form was submitted
      $inputName = test_input($_POST['inputFName']); //get input text
