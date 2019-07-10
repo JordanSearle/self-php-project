@@ -2,25 +2,23 @@
 /**
  * Define MyClass
  */
-class user
+class account
 {
   private $servername = "localhost";
   private $username = "imjswxjj_Jsearle";
   private $password = "password";
   private $dbname = "testdb";
 
-    function createTable(){
 
-    }
 
-    function insert($table,$inputName,$inputEmail,$inputPasword){
+    function insert($inputName,$inputEmail,$inputPasword){
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       // Check connection
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "INSERT INTO $table (fullname, email, password)VALUES ('$inputName', '$inputEmail', '$inputPasword')";
+      $sql = "INSERT INTO user (fullname, email, password)VALUES ('$inputName', '$inputEmail', '$inputPasword')";
 
       if ($conn->query($sql) === TRUE) {
           echo "New record created successfully";
@@ -31,13 +29,13 @@ class user
       $conn->close();
     }
 
-    function readAll($table){
+    function readAll(){
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "SELECT * FROM $table";
+      $sql = "SELECT * FROM user";
       $result = $conn->query($sql);
 
       if ($result->num_rows > 0) {
@@ -50,14 +48,14 @@ class user
       }
       $conn->close();
     }
-    function update($table,$inputName,$inputEmail,$inputPasword,$id){
+    function update($inputName,$inputEmail,$inputPasword,$id){
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       // Check connection
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "UPDATE $table SET fullname = '$inputName' , email = '$inputEmail', password = '$inputPasword' WHERE userID = $id";
+      $sql = "UPDATE user SET fullname = '$inputName' , email = '$inputEmail', password = '$inputPasword' WHERE userID = $id";
 
       if ($conn->query($sql) === TRUE) {
           echo "New record updated successfully";
@@ -67,14 +65,14 @@ class user
 
       $conn->close();
     }
-    function delete($table,$id){
+    function delete($id){
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       // Check connection
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "DELETE FROM $table WHERE userID = $id";
+      $sql = "DELETE FROM user WHERE userID = $id";
 
       if ($conn->query($sql) === TRUE) {
           echo "Record deleted successfully";
@@ -82,14 +80,14 @@ class user
           echo "Error: " . $sql . "<br>" . $conn->error;
       }
     }
-    function emptyTable($table){
+    function emptyTable(){
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       // Check connection
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "DELETE FROM $table";
+      $sql = "DELETE FROM user";
 
       if ($conn->query($sql) === TRUE) {
           echo "Records deleted successfully";
