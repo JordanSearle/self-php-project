@@ -9,8 +9,19 @@ class posts
   private $password = "password";
   private $dbname = "testdb";
 
+  public $postID;
+  public $postTitle;
+  public $postBody;
+  public $cover_IMG_URL;
+  public $cover_IMG_Title;
+  public $post_Date;
+  public $last_Edit_Date;
+  public $groupID;
 
 
+    function test(){
+    echo $this->getPostID() .$this->getPostTitle() . $this->getPostBody() . $this->getCoverIMGURL() . $this->getCoverIMGTitle() . $this->getPostDate() . $this->getLastEditDate() . $this->getGroupID() . "<br>";
+    }
     function insert($postTitle,$postBody,$coverIMG,$coverIMG_URL,$cDate,$eDate,$groupID){ /**Edited Correctly **/
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       // Check connection
@@ -30,6 +41,7 @@ class posts
     }
 
     function readAll(){ /**Edited Correctly **/
+      $postList = [];
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
@@ -40,23 +52,38 @@ class posts
 
       if ($result->num_rows > 0) {
           // output data of each row
+
           while($row = $result->fetch_assoc()) {
-              echo "id: " . $row["postID"]. " - Title: " . $row["postTitle"]. " - postBody: " . $row["postBody"]. " - Cover Img: " . $row["cover_IMG_Title"]. " - cover_IMG_URL: " . $row["cover_IMG_URL"]." - post_Date: " .
-             $row["post_Date"]. " - Last Edit: " . $row["last_Edit_Date"] . " - group ID: " . $row["groupID"]. "<br>";
+              $post = new posts();
+
+              $post->setPostID($row["postID"]);
+              $post->setPostTitle($row["postTitle"]);
+              $post->setPostBody($row["postBody"]);
+              $post->setCoverIMGURL($row["cover_IMG_URL"]);
+              $post->setCoverIMGTitle($row["cover_IMG_Title"]);
+              $post->setPostDate($row["post_Date"]);
+              $post->setLastEditDate($row["last_Edit_Date"]);
+              $post->setGroupID($row["groupID"]);
+
+              //echo $post->getPostTitle();
+              //echo $row["postID"].$row["postTitle"].$row["postBody"].$row["cover_IMG_URL"].$row["cover_IMG_Title"].$row["post_Date"].$row["last_Edit_Date"].$row["groupID"];
+             $postlist[] = $post;
           }
       } else {
           echo "0 results";
       }
       $conn->close();
+      return $postlist;
     }
-    function update($ID,$postTitle,$postBody,$coverIMG,$cover_IMG_URL,$cDate,$eDate,$groupID){ /**Edited Correctly **/
+
+    function update(){ /**Edited Correctly **/
       $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
       // Check connection
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       }
 
-      $sql = "UPDATE post SET postTitle = '$postTitle', postBody = '$postBody', cover_IMG_Title = '$coverIMG', cover_IMG_URL= '$cover_IMG_URL', post_Date = ' $cDate', last_Edit_Date = '$eDate', groupID = '$groupID' WHERE postID = $ID";
+      $sql = "UPDATE post SET postTitle = '$this->$postTitle', postBody = '$this->$postBody', cover_IMG_Title = '$this->$cover_IMG_Title', cover_IMG_URL= '$this->$cover_IMG_URL', post_Date = ' $this->post_Date', last_Edit_Date = '$this->last_Edit_Date', groupID = '$this->$groupID' WHERE postID = $this->$postID";
 
       if ($conn->query($sql) === TRUE) {
           echo "New record updated successfully";
@@ -98,43 +125,199 @@ class posts
     }
 
 
-    function return_blog_Post(){
-
-      $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
-      if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-      }
-
-      $sql = "SELECT post_Date, CASE  WHEN LENGTH(postBody) >= 300 THEN CONCAT(LEFT(postBody,300),' . . .') ELSE postBody END AS postBody, postTitle, post_group.groupTitle FROM post inner join post_group where post.groupID = post_group.groupID";
-      $result = $conn->query($sql);
-
-      if ($result->num_rows > 0) {
-          // output data of each row
-          while($row = $result->fetch_assoc()) {
-            echo ' <div class="w3-card-4 w3-margin w3-white">
-                <img src="https://www.w3schools.com/w3images/woods.jpg" alt="Nature" style="width:100%">
-                <div class="w3-container">
-                  <h3><b>'.$row["postTitle"].'</b></h3>
-                  <h5>'. $row["groupTitle"].'<span class="w3-opacity"> '. date("m/d/Y", strtotime($row["post_Date"]))  .'</span></h5>
-                </div>
-
-                <div class="w3-container">
-                  <p>'.$row["postBody"].'</p>
-                  <div class="w3-row">
-                    <div class="w3-col m8 s12">
-                      <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <hr>';
-          }
-      } else {
-          echo "0 results";
-      }
-      $conn->close();
 
 
+    /**
+     * Get the value of Post
+     *
+     * @return mixed
+     */
+    public function getPostID()
+    {
+        return $this->postID;
     }
+
+    /**
+     * Set the value of Post
+     *
+     * @param mixed postID
+     *
+     * @return self
+     */
+    public function setPostID($postID)
+    {
+        $this->postID = $postID;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Post Title
+     *
+     * @return mixed
+     */
+    public function getPostTitle()
+    {
+        return $this->postTitle;
+    }
+
+    /**
+     * Set the value of Post Title
+     *
+     * @param mixed postTitle
+     *
+     * @return self
+     */
+    public function setPostTitle($postTitle)
+    {
+        $this->postTitle = $postTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Post Body
+     *
+     * @return mixed
+     */
+    public function getPostBody()
+    {
+        return $this->postBody;
+    }
+
+    /**
+     * Set the value of Post Body
+     *
+     * @param mixed postBody
+     *
+     * @return self
+     */
+    public function setPostBody($postBody)
+    {
+        $this->postBody = $postBody;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Cover IMG URL
+     *
+     * @return mixed
+     */
+    public function getCoverIMGURL()
+    {
+        return $this->cover_IMG_URL;
+    }
+
+    /**
+     * Set the value of Cover IMG URL
+     *
+     * @param mixed cover_IMG_URL
+     *
+     * @return self
+     */
+    public function setCoverIMGURL($cover_IMG_URL)
+    {
+        $this->cover_IMG_URL = $cover_IMG_URL;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Cover IMG Title
+     *
+     * @return mixed
+     */
+    public function getCoverIMGTitle()
+    {
+        return $this->cover_IMG_Title;
+    }
+
+    /**
+     * Set the value of Cover IMG Title
+     *
+     * @param mixed cover_IMG_Title
+     *
+     * @return self
+     */
+    public function setCoverIMGTitle($cover_IMG_Title)
+    {
+        $this->cover_IMG_Title = $cover_IMG_Title;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Post Date
+     *
+     * @return mixed
+     */
+    public function getPostDate()
+    {
+        return $this->post_Date;
+    }
+
+    /**
+     * Set the value of Post Date
+     *
+     * @param mixed post_Date
+     *
+     * @return self
+     */
+    public function setPostDate($post_Date)
+    {
+        $this->post_Date = $post_Date;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Last Edit Date
+     *
+     * @return mixed
+     */
+    public function getLastEditDate()
+    {
+        return $this->last_Edit_Date;
+    }
+
+    /**
+     * Set the value of Last Edit Date
+     *
+     * @param mixed last_Edit_Date
+     *
+     * @return self
+     */
+    public function setLastEditDate($last_Edit_Date)
+    {
+        $this->last_Edit_Date = $last_Edit_Date;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Group
+     *
+     * @return mixed
+     */
+    public function getGroupID()
+    {
+        return $this->groupID;
+    }
+
+    /**
+     * Set the value of Group
+     *
+     * @param mixed groupID
+     *
+     * @return self
+     */
+    public function setGroupID($groupID)
+    {
+        $this->groupID = $groupID;
+
+        return $this;
+    }
+
 }
 ?>

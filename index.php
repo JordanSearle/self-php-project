@@ -23,9 +23,12 @@ $title = "Welcome";
    $group = new groups();
    $group->readAll();
 
-   $post = new posts();
-   $post->readAll();
+   $postd = new posts();
 
+   $c = $postd->readAll();
+   foreach ($c as $score) {
+   echo $score->test();
+  }
   if(isset($_POST['SubmitButton'])){ //check if form was submitted
      $inputName = test_input($_POST['inputFName']); //get input text
      $inputEmail = test_input($_POST['inputEmail']); //get input text
